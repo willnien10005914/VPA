@@ -18,6 +18,17 @@ def Fibonacci(n):
     else:
         return Fibonacci(n-1)+Fibonacci(n-2)
 
+def Fibonacci1(n):
+    t1 = 0
+    t2 = 1
+    next = 0
+    for i in range(n):
+        next = t1 + t2
+        t1 = t2
+        t2=next
+    return t1
+
+
 
 
 def deviation(X):
@@ -45,7 +56,7 @@ def main():
     print("derivative : %d" % derivative(square, 2))
     print("deviation : %f" % statistics.stdev(A))
     print("deviation : %f" % deviation(A))
-    print(Fibonacci(30))
+    print(Fibonacci1(7))
 
 if __name__ == '__main__':
     main()
