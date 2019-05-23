@@ -10,6 +10,7 @@ def deviation(A):
     for i in A:
 
 
+test
 
 
 def main():
