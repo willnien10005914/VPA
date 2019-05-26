@@ -48,14 +48,8 @@ def Derivative(f, x, h=0.01):
     return (f(x + h / 2) - f(x - h / 2)) / h
 
 
-
-def Derivative_f(x, n, h=0.01):
-    if (n == 0):
-        ret = f(x)
-    else:
-        ret = (Derivative_f(x + h, n - 1) - Derivative_f(x, n - 1)) / h
-    return ret
-
+def Square(x):
+    return x * x
 
 
 def Derivative_g(x, n, h=0.01):
@@ -65,10 +59,6 @@ def Derivative_g(x, n, h=0.01):
         ret = (Derivative_g(x + h / 2, n - 1) - Derivative_g(x - h / 2, n - 1 )) / h
 
     return ret
-
-
-def Square(x):
-    return x * x
 
 
 def g(x):
@@ -88,16 +78,6 @@ def g(x):
     return f1 + f2
 
 
-def f(x):
-    """
-    f(x) = 1 + x + x^2
-    """
-    f0 = 1
-    f1 = x
-    f2 = x * x
-    return f0 + f1 + f2
-
-
 def Taylor_Reminder(a, x, n):
     factorial = 1
     x_pow = 1
@@ -107,7 +87,7 @@ def Taylor_Reminder(a, x, n):
         x_pow *= (x - a)
 
     # c between x and a
-    c = 0.0000001
+    c = 0.01
     return (Derivative_g(c, n + 1) * (x_pow)) / factorial
 
 
@@ -124,8 +104,7 @@ def Taylor_Expansion(a, x, n):
             x_pow *= (x - a)
 
         ret += ((Derivative_g(a, i + 1) * x_pow) / factorial)
-    return ret
-
+    return ret + Taylor_Reminder(a, x, n)
 
 
 """
@@ -145,8 +124,6 @@ def Taylor_Expansion(a, x, n):
 """
 
 
-
-
 def main():
     print("%s" % "台北第一期 :")
     print("1. Compute the Formula for standard deviation :")
@@ -162,7 +139,7 @@ def main():
 
 
     print("\n%s" % "台北第二期 :")
-    print("1. Create a custom function, Dericative() :")
+    print("1. Create a custom function, Derivative() :")
     test_f = Square
     test_x = 3
     print("\tDerivative : %d\n" % Derivative(test_f, test_x))
@@ -171,11 +148,11 @@ def main():
     a = 0
     x = 3
     n = 7
-    ret_g = g(x)
-    ret_d = Taylor_Expansion(a, x, n) + Taylor_Reminder(a, x, n)
-    err = Taylor_Reminder(a, x, n)
+    ans_g = g(x)
+    ans_g_taylor = Taylor_Expansion(a, x, n)
+    err = ((ans_g - ans_g_taylor) / ans_g) * 100
 
-    print("\tg(%d) = %.2f, Taylor_Expansion(%d) = %.2f, err = %f\n" % (x, ret_g, x, ret_d, err))
+    print("\tg(%d) = %.2f, Taylor_Expansion(%d) = %.2f, err = %.2f%%\n" % (x, ans_g, x, ans_g_taylor, err))
 
 
 
