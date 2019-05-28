@@ -30,16 +30,6 @@ def Fibonacci_recursive(n):
         return Fibonacci_recursive(n - 1) + Fibonacci_recursive(n - 2)
 
 
-def Fibonacci(n):
-    t1 = 1
-    t2 = 1
-    for i in range(n):
-        next = t1 + t2
-        t1 = t2
-        t2 = next
-    return t1
-
-
 """
 台北第二期
 """
@@ -216,14 +206,79 @@ def diagonal_sum_check(data):
     return True
 
 """
-新竹第二期
+新竹第三期
 """
+def Fibonacci(n):
+    t1 = 0
+    t2 = 1
+    for i in range(n):
+        next = t1 + t2
+        t1 = t2
+        t2 = next
+    return t1
 
+
+def reverse(data):
+    i = 0
+    c = 0
+    for i in range(len(data) // 2):
+        c = data[i]
+        data[i] = data[len(data) - i - 1]
+        data[len(data) - i - 1] = c
+    return data
+
+
+def func1(x, i, j):
+    a = x[i]
+    x[i] = x[j]
+    x[j] = a
+
+
+def func2(data):
+    for i in range(len(data) - 1):
+        for j in range(len(data) - 1 - i):
+            if data[j] > data[j+1]:
+                func1(data, j, j + 1)
+    return data
+
+
+def pair(data, target):
+    for i in range(len(data) - 1):
+        for j in range(i + 1, len(data) - 1):
+            if data[i] + data[j] == target:
+                return [i, j]
+    return None
 
 
 """
 台北第四期
 """
+def swap(i, j, data):
+    tmp = data[i]
+    data[i] = data[j]
+    data[j] = tmp
+
+
+def reverse_1(data):
+    for i in range(len(data) // 2):
+        swap(i, len(data) - 1 - i, data)
+    return data
+
+
+def Function_3(x):
+    if x > 0:
+        return x
+    else:
+        return x / 100
+
+
+def Function_4(data):
+    return [Max(data), Min(data)]
+
+
+def Function_5(data):
+    return MinMaxScaler(data)
+
 
 
 def main():
@@ -236,8 +291,7 @@ def main():
 
     print("2. Consider Fibonacci numbers :")
     test_index = 30
-    #print("\tFibonacci_recursive(%d) = %d\n" % (test_index, Fibonacci_recursive(test_index)))
-    print("\tFibonacci(%d) = '%d'\n" % (test_index, Fibonacci(test_index)))
+    print("\tFibonacci_recursive(%d) = %d\n" % (test_index, Fibonacci_recursive(test_index)))
 
 
     print("\n%s" % "台北第二期 :")
@@ -255,7 +309,6 @@ def main():
     err = ((ans_g - ans_g_taylor) / ans_g) * 100
     print("\tg(%d) = %.2f, Taylor_Expansion(%d) = %.2f, err = %.2f%%\n" % (x, ans_g, x, ans_g_taylor, err))
 
-
     print("\n%s" % "台北第三期 :")
     print("1. Create a function and named it MinMaxScaler :")
     test_arr = [4, 9, 3, 10, 0, 2]
@@ -268,6 +321,40 @@ def main():
     print("3. Create a function and named it MagicSquare :")
     test_arr = [[2, 7, 6], [9, 5, 1], [4, 3, 8]]
     print("\tMagicSquare %s : %s\n" % (test_arr, MagicSquare(test_arr)))
+
+    print("\n%s" % "新竹第三期 :")
+    print("1. Please finish the Fibonacci function :")
+    print("\tFibonacci(%d) = '%d'\n" % (test_index, Fibonacci(test_index)))
+
+    print("2. Please finish the reverse function :")
+    test_arr = [5, 7, 9, 1, 3, 4]
+    print("\treverse(%s) =" % test_arr, end='')
+    print("\t%s\n" % reverse(test_arr))
+
+    print("3. Please write down the result of the following lines :")
+    test_arr = [6, 5, 1, 8, 13, 22, 9, 1]
+    print("\t%s\n" % func2(test_arr))
+
+    print("4. Write a function which satisfies following rules :")
+    test_arr = [3, 6, 2, 1, 9, 10]
+    print("\t%s\n" % pair(test_arr, 10))
+
+    print("\n%s" % "台北第四期 :")
+    print("1. Given two integers i, j and a list :")
+    test_arr = ['A', 'I', 'A', 'o', 'T', 'e', 'm', 'o', 'c', 'l', 'e', 'W']
+    print("\treverse_1(%s) =" % test_arr)
+    print("\t\t\t  %s\n" % reverse_1(test_arr))
+    test_data = 5
+    print("\tFunction_3(%d) = '%d'" % (test_data, Function_3(test_data)))
+    test_data = -5
+    print("\tFunction_3(%d) = '%.2f'" % (test_data, Function_3(test_data)))
+    test_arr = [3, 16, 11, 5, 28]
+    print("\tFunction_4(%s) = '%s'" % (test_arr, Function_4(test_arr)))
+    test_arr = [1, 2, 3]
+    print("\tFunction_5(%s) = '%s'" % (test_arr, Function_5(test_arr)))
+    test_arr = [2, 4, 6, 8, 10]
+    print("\tFunction_5(%s) = '%s'\n" % (test_arr, Function_5(test_arr)))
+
 
 if __name__ == '__main__':
     main()
