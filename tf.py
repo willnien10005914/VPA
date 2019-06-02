@@ -1,5 +1,7 @@
 import math
 import statistics
+import pandas as pd
+import numpy as np
 
 
 """
@@ -280,8 +282,99 @@ def Function_5(data):
     return MinMaxScaler(data)
 
 
+def Statistics(d):
+    df = pd.DataFrame(d)
+    #print(df['x'].value_counts(sort=False))
+    #print(df.describe())
+    #print("var = %.2f"%df.var())
+
+    Q1 = np.percentile(df['x'], 25, interpolation='midpoint')
+    Q3 = np.percentile(df['x'], 75)
+    IQR = Q3 - Q1
+    lower_inner_fence = Q1 - (1.5 * IQR)
+    upper_inner_fence = Q3 + (1.5 * IQR)
+    print("numpy pr 25 (Q1) : %.2f" % Q1)
+    print("numpy pr IQR : %.2f" % IQR)
+    print("numpy pr 75 (Q3) : %.2f" % Q3)
+    print("lower_inner_fence : %.2f" % lower_inner_fence)
+    print("upper_inner_fence: %.2f\n" % upper_inner_fence)
+
+    outlier_count = 0
+    for i in df['x']:
+        if i > upper_inner_fence or i < lower_inner_fence:
+            outlier_count += 1
+            print("found outlier : %d" % i)
+
+    print("outlier count : %d\n" % outlier_count)
+
+
+    print("statistics mean : %.2f" % statistics.mean(df['x']))
+    print("statistics stdev : %.2f"%statistics.stdev(df['x']))
+    print("statistics median : %.2f" % statistics.median(df['x']))
+    print("statistics mode : %.2f" % statistics.mode(df['x']))
+    print("statistics var : %.2f" % statistics.variance(df['x']))
+
+    if statistics.mean(df['x']) < statistics.median(df['x']) and statistics.median(df['x']) < statistics.mode(df['x']) :
+        print("=> left skewed distribution")
+
+    if statistics.mean(df['x']) > statistics.median(df['x']) and statistics.median(df['x']) > statistics.mode(df['x']) :
+        print("=> right skewed distribution")
+
+def Derangement(n):
+    if (n == 1): return 0
+    if (n == 0): return 1
+    if (n == 2): return 1
+
+    return (n - 1) * (Derangement(n - 1) + Derangement(n - 2))
+
+
+def findStep(n):
+    if (n == 1 or n == 0):
+        return 1
+    elif (n == 2):
+        return 2
+    else:
+        return findStep(n - 2) + findStep(n - 1)
+        """
+        with step 3 option
+        return findStep(n - 3) + findStep(n - 2) + findStep(n - 1)
+        """
+
+
+def ZscoreToX(mean, std, z):
+    x = (z * std) + mean
+    return x
+
+
+def getPBA(PA, PB, PAB):
+    intersection = PAB * PB
+    return intersection / PA
+
+
+def BayesRule(target, PA, PBA):
+    sum = 0
+
+    for i in range(len(PA)):
+        sum += (PA[i] * PBA[i])
+    return (PA[target] * PBA[target]) / sum
+
+
+def P(n):
+    return 1 / ((n + 1) * (n + 2))
+
+def BayesRule_1(PA, PB):
+    p_target_event = 0
+    p_known_event = 0
+
+    for i in PA:
+        p_target_event += P(i)
+    for i in PB:
+        p_known_event += P(i)
+    return p_target_event / p_known_event
+
 
 def main():
+    print("================程式題================================\n")
     print("%s" % "台北第一期 :")
     print("1. Compute the Formula for standard deviation :")
 
@@ -356,6 +449,83 @@ def main():
     print("\tFunction_5(%s) = '%s'\n" % (test_arr, Function_5(test_arr)))
 
 
+    print("\n================機率與統計題================================\n")
+
+    print("上課講義 Example 7 : ")
+    n = 4
+    print("Derangement(%d) = %d" % (n, Derangement(n)))
+
+    print("\n上課講義 Example 8 : ")
+    n = 10
+    print("findStep(%d) = %d" % (n, findStep(n)))
+
+    print("\n台北第一期第18題 :")
+    d = {
+        'x': pd.Series([
+            0,
+            1, 1, 1,
+            2, 2, 2, 2, 2,
+            3, 3, 3, 3,
+            4, 4, 4,
+            5, 5,
+            6,
+            7,
+            8,
+        ])
+    }
+    Statistics(d)
+
+    print("\n台北第一期第11題 : ")
+    PA = 0.25
+    PB = 0.4
+    PAB = 0.1
+    print("getPBA(PA=%.2f, PB=%.2f, PAB=%.2f) = %.2f" % (PA, PB, PAB, getPBA(PA, PB, PAB)))
+
+
+    print("\n台北第一期第16題 : ")
+    mean = 100
+    std = 15
+    z = 1.2
+    print("ZscoreToX(mean=%.2f, std=%.2f, z=%.2f) = %.2f" % (mean, std, z, ZscoreToX(mean, std, z)))
+
+
+    print("\n台北第三期第14題 : ")
+    #target for 21-30 on the index 1
+    target = 1
+    PA = [0.06, 0.03, 0.02, 0.04]
+    PBA = [0.08, 0.15, 0.49, 0.28]
+    print("BayesRule(target=%d, PA=%s, PBA=%s) = %.4f" % (target, PA, PBA, BayesRule(target, PA, PBA)))
+
+
+    print("\n台北第三期第16題 : ")
+    PA = [2, 3, 4]
+    PB = [0, 1, 2, 3, 4]
+    print("BayesRule_1(PA=%s, PB=%s) = %.4f" % (PA, PB, BayesRule_1(PA, PB)))
+
+
+    print("\n台北第四期第7題 :")
+    d = {
+        'x': pd.Series([
+            25, 60, 60, 80, 95, 100
+        ])
+    }
+    Statistics(d)
+
+    print("\n台北第四期第9題 :")
+    d = {
+        'x': pd.Series([
+            83, 99, 99, 103, 103, 103,
+            105, 105, 105, 105, 105,
+            105, 105, 105, 105, 105,
+            105, 105, 105, 105, 105, 105,
+            110, 110, 110,
+            110, 110, 110,
+            110, 110, 110,
+            113, 113, 113, 113, 113
+        ])
+    }
+    Statistics(d)
+
 if __name__ == '__main__':
     main()
 
@@ -363,4 +533,4 @@ if __name__ == '__main__':
 
 __author__ = "Will Nien"
 __email__ = "will.nien@quantatw.com"
-__version__ = "1.0.0"
+__version__ = "1.0.1"
