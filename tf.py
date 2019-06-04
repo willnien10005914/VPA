@@ -282,6 +282,76 @@ def Function_5(data):
     return MinMaxScaler(data)
 
 
+def MSE(y, y_hat):
+    sum = 0
+    for i in range(len(y) - 1):
+        sum += ((y[i] - y_hat[i]) * (y[i] - y_hat[i]))
+
+    return sum/(len(y) - 1)
+
+
+def roman_numerals(num):
+    values = [100, 90, 50, 40, 10, 9, 5, 4, 1]
+    symbols = ['C', 'XC', 'L', 'XL', 'X', 'IX', 'V', 'IV', 'I']
+    list = []
+
+    for i in range(len(values)):
+        if (num / values[i] > 0):
+            quotient = int(num / values[i])
+            for j in range(quotient):
+                list.append(symbols[i])
+        num = num % values[i]
+    return list
+
+
+def RLE(list):
+    rle = []
+    previous = list[0]
+    count = 1
+
+    for i in range(1, len(list)):
+        if previous == list[i]:
+            count += 1
+        else:
+            rle.append(count)
+            rle.append(previous)
+            count = 1
+            previous = list[i]
+
+    rle.append(count)
+    rle.append(previous)
+    return rle
+
+
+def ngram(list, n):
+    ret = []
+    if len(list) <= n:
+        return list
+
+    for i in range(len(list) - (n - 1)):
+        tmp = []
+        tmp.append(list[i])
+        for j in range(1, n):
+            tmp.append(list[i + j])
+
+        ret.insert(i, tmp)
+        del tmp
+    return ret
+
+
+def similarity(s1, s2, n):
+    ns1 = ngram(s1, n)
+    ns2 = ngram(s2, n)
+    count = 0
+
+    for i in range(len(ns1)):
+        for j in range(len(ns2)):
+            if ns1[i] == ns2[j]:
+                count += 1
+
+    return (2 * count) / (len(ns1) + len(ns2))
+
+
 def Statistics(d):
     df = pd.DataFrame(d)
     #print(df['x'].value_counts(sort=False))
@@ -447,7 +517,28 @@ def main():
     print("\tFunction_5(%s) = '%s'" % (test_arr, Function_5(test_arr)))
     test_arr = [2, 4, 6, 8, 10]
     print("\tFunction_5(%s) = '%s'\n" % (test_arr, Function_5(test_arr)))
+    y = [1, 2, 3, 4, 5, 6, 7]
+    y_hat = [1, 2, 3, 4, 5, 6, 7]
+    print("\tMSE() = '%.2f'\n" % (MSE(y, y_hat)))
 
+    print("2-1. Roman numerals are represented y seven different symbols :")
+    test_data = 88
+    print("\troman_numerals(%d) =%s\n" % (test_data, roman_numerals(test_data)))
+
+    print("2-2. Run-length encoding (RLE) :")
+    test_arr = ['L', 'X', 'X', 'X', 'V', 'I', 'I']
+    print("\tRLE(%s) =%s\n" % (test_arr, RLE(test_arr)))
+
+    print("2-3. Please write a function that returns the n-gram :")
+    test_arr = ['A', 'I', 'A', 'C', 'A', 'D', 'E', 'M', 'Y']
+    n = 4
+    print("\tn-gram(%s) =%s\n" % (test_arr, ngram(test_arr, n)))
+
+    print("2-4. Please write a function that returns the similarity :")
+    s1 = ['H', 'O', 'N', 'E', 'Y']
+    s2 = ['L', 'E', 'M', 'O', 'N']
+    n = 2
+    print("\tsimilarity(%s, %s, %d) = %.2f\n" % (s1, s2, n, similarity(s1, s2, n)))
 
     print("\n================機率與統計題================================\n")
 
