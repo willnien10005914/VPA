@@ -165,28 +165,38 @@ def MagicSquare(data):
 
 
 def row_sum_check(data):
-    r = [0,]*3
+    r_len = len(data)
+    c_len = len(data[0])
+
+    ret = [0,]*r_len
     i = 0
-    for row in data:
-        for col in row:
-            r[i] += col
+
+    for r in range(r_len):
+        for c in range(c_len):
+            ret[i] += data[r][c]
         i += 1
 
-    for i in range(len(r) - 1):
-        if r[i] != r[i+1]:
+
+    for i in range(len(ret) - 1):
+        if ret[i] != ret[i+1]:
             return False
     return True
 
 
 def column_sum_check(data):
-    c = [0,]*3
+    r_len = len(data)
+    c_len = len(data[0])
 
-    for row in range(len(data)):
-        for col in range(len(data[row])):
-            c[col] += data[row][col]
+    ret = [0,]*c_len
+    i = 0
 
-    for i in range(len(c) - 1):
-        if c[i] != c[i+1]:
+    for c in range(c_len):
+        for r in range(r_len):
+            ret[i] += data[r][c]
+        i += 1
+
+    for i in range(len(ret) - 1):
+        if ret[i] != ret[i+1]:
             return False
     return True
 
@@ -624,4 +634,4 @@ if __name__ == '__main__':
 
 __author__ = "Will Nien"
 __email__ = "will.nien@quantatw.com"
-__version__ = "1.0.1"
+__version__ = "1.0.2"
