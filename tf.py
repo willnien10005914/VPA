@@ -255,8 +255,8 @@ def func2(data):
 
 
 def pair(data, target):
-    for i in range(len(data) - 1):
-        for j in range(i + 1, len(data) - 1):
+    for i in range(len(data)):
+        for j in range(i + 1, len(data)):
             if data[i] + data[j] == target:
                 return [i, j]
     return None
@@ -509,7 +509,7 @@ def main():
     print("\t%s\n" % func2(test_arr))
 
     print("4. Write a function which satisfies following rules :")
-    test_arr = [3, 6, 2, 1, 9, 10]
+    test_arr = [3, 6, 2, 5, 9, 1]
     print("\t%s\n" % pair(test_arr, 10))
 
     print("\n%s" % "台北第四期 :")
