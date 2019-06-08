@@ -294,7 +294,7 @@ def Function_5(data):
 
 def MSE(y, y_hat):
     sum = 0
-    for i in range(len(y) - 1):
+    for i in range(len(y)):
         sum += ((y[i] - y_hat[i]) * (y[i] - y_hat[i]))
 
     return sum/(len(y) - 1)
@@ -527,7 +527,7 @@ def main():
     print("\tFunction_5(%s) = '%s'" % (test_arr, Function_5(test_arr)))
     test_arr = [2, 4, 6, 8, 10]
     print("\tFunction_5(%s) = '%s'\n" % (test_arr, Function_5(test_arr)))
-    y = [1, 2, 3, 4, 5, 6, 7]
+    y = [1, 2, 3, 4, 5, 6, 6]
     y_hat = [1, 2, 3, 4, 5, 6, 7]
     print("\tMSE() = '%.2f'\n" % (MSE(y, y_hat)))
 
