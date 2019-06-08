@@ -306,10 +306,8 @@ def roman_numerals(num):
     list = []
 
     for i in range(len(values)):
-        if (num / values[i] > 0):
-            quotient = int(num / values[i])
-            for j in range(quotient):
-                list.append(symbols[i])
+        for j in range(int(num / values[i])):
+            list.append(symbols[i])
         num = num % values[i]
     return list
 
@@ -340,8 +338,7 @@ def ngram(list, n):
 
     for i in range(len(list) - (n - 1)):
         tmp = []
-        tmp.append(list[i])
-        for j in range(1, n):
+        for j in range(0, n):
             tmp.append(list[i + j])
 
         ret.insert(i, tmp)
@@ -532,7 +529,7 @@ def main():
     print("\tMSE() = '%.2f'\n" % (MSE(y, y_hat)))
 
     print("2-1. Roman numerals are represented y seven different symbols :")
-    test_data = 88
+    test_data = 388
     print("\troman_numerals(%d) =%s\n" % (test_data, roman_numerals(test_data)))
 
     print("2-2. Run-length encoding (RLE) :")
