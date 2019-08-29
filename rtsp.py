@@ -33,9 +33,14 @@ class ipcamCapture:
         # 當有需要影像時，再回傳最新的影像。
         return self.Frame
 
+    def getStatus(self):
+        return self.status
+
     def queryframe(self):
         while (not self.isstop):
-            self.status, self.Frame = self.capture.read()
+            self.status, tmp = self.capture.read()
+            if (self.status == True) :
+                self.Frame = tmp
 
         self.capture.release()
 
@@ -55,6 +60,8 @@ def open_webcam_1():
     # 使用無窮迴圈擷取影像，直到按下Esc鍵結束
     try:
         while True:
+
+
             # 使用 getframe 取得最新的影像
             I = ipcam.getframe()
 
@@ -63,10 +70,17 @@ def open_webcam_1():
             I = cv2.cvtColor(I, cv2.COLOR_BGR2GRAY)
 
             cv2.imshow('Image', I)
-            if cv2.waitKey(1000) == 27:
+
+
+            if cv2.waitKey(10) == 27:
                 cv2.destroyAllWindows()
                 ipcam.stop()
                 break
+            '''
+            if cv2.waitKey(1000) == ord('p'):
+                print("snapshot!!!!!!!!!!!!!!!")
+                threading.Thread(target=save_picture_1, daemon=True, args=(I,)).start()
+            '''
     except:
         print("An exception occurred")
         open_webcam_1()
@@ -112,17 +126,28 @@ def open_picture_2():
 
 def save_video_1():
     print("save_video_1")
-    cap = cv2.VideoCapture(URL)
+    cap = cv2.VideoCapture(URL1)
+
     ret, frame = cap.read()
-    while ret:
+
+    f = cv2.VideoWriter_fourcc(*'mp4v')
+    out = cv2.VideoWriter('a.mp4', f, 16.0, (1280, 720))
+
+    while True:
         ret, frame = cap.read()
-        cv2.imshow("frame", frame)
+        if ret:
+            out.write(frame)
+        else:
+            continue
+        #cv2.imshow("frame", frame)
         if cv2.waitKey(1) & 0xFF == ord('q'):
+            cap.release()
+            out.release()
             break
-    cv2.destroyAllWindows()
-    cap.release()
 
-
+def save_picture_1(frame):
+    print("save_picture_1")
+    cv2.imwrite('a.jpg', frame)
 
 def test():
     while True:
@@ -130,11 +155,12 @@ def test():
         print("test")
 
 def main():
+    #threading.Thread(target=save_video_1, daemon=True, args=()).start()
     threading.Thread(target=open_webcam_1, daemon=True, args=()).start()
-    threading.Thread(target=open_webcam_2, daemon=True, args=()).start()
+    #threading.Thread(target=open_webcam_2, daemon=True, args=()).start()
 
-    threading.Thread(target=open_picture_1, daemon=True, args=()).start()
-    threading.Thread(target=open_picture_2, daemon=True, args=()).start()
+    #threading.Thread(target=open_picture_1, daemon=True, args=()).start()
+    #threading.Thread(target=open_picture_2, daemon=True, args=()).start()
     test()
     #open_picture_1()
 
